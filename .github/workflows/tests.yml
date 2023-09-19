@@ -1,0 +1,47 @@
+name: Jest Tests
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+jobs:
+  Jest:
+    runs-on: ubuntu-latest
+    container: node:18
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: nightbase
+          POSTGRES_PASSWORD: nightbase
+          POSTGRES_DB: nightbase
+        ports:
+          - 5432:5432
+      rabbitmq:
+        image: rabbitmq:3.11.23-management-alpine
+        ports:
+          - 5672:5672
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Create Database
+        run: npm run db:generate
+        env:
+          DB_HOST: postgres
+
+      - name: Run Tests
+        run: npm run test:e2e
+        env:
+          BROKER_HOST: rabbitmq
+          DB_HOST: postgres
+     
