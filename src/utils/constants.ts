@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const DATABASE_NAME = 'NightBase-User';
+export const DATABASE_NAME = 'NightBase-Account';
 
 export const ACCOUNT_SERVICE_NAME = 'ACCOUNT_SERVICE';
 export const ACCOUNT_QUEUE_NAME = 'NightBase:Account';
