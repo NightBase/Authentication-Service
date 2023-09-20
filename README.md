@@ -4,7 +4,7 @@
 
 <div align="center">
     <h1>NightBase Authentication Microservice</h1>
-    <img src="https://www.codefactor.io/repository/github/nightbase/account-service/badge" alt="CodeFactor" />
+    <img src="https://www.codefactor.io/repository/github/nightbase/authentication-service/badge" alt="CodeFactor" />
 </div>
 
 <br><br>
