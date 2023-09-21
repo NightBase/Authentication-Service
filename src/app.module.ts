@@ -57,4 +57,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     ]),
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(IsTokenValid).forRoutes({
+      path: 'v1/auth/*',
+      method: RequestMethod.ALL,
+    });
+  }
+}
