@@ -1,14 +1,28 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TokenModule } from './api/v1/token/token.module';
 import { JwtModule } from '@nestjs/jwt';
-import { DATABASE_NAME } from './utils/constants';
+import {
+  AUTHENTICATION_QUEUE_NAME,
+  AUTHENTICATION_SERVICE_NAME,
+  BROKERS,
+  DATABASE_NAME,
+} from './utils/constants';
 import { AccountModule } from './api/v1/account/account.module';
+import { AuthModule } from './api/v1/authentication/authN.module';
+import { IsTokenValid } from './api/v1/middleware/token.middleware';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
     TokenModule,
     AccountModule,
+    AuthModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DB_HOST,
