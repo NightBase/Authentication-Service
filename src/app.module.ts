@@ -3,10 +3,12 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { TokenModule } from './api/v1/token/token.module';
 import { JwtModule } from '@nestjs/jwt';
 import { DATABASE_NAME } from './utils/constants';
+import { AccountModule } from './api/v1/account/account.module';
 
 @Module({
   imports: [
     TokenModule,
+    AccountModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DB_HOST,
