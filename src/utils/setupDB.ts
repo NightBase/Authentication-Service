@@ -13,6 +13,7 @@ const sequelize = new Sequelize({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   dialect: 'postgres',
+  logging: false,
 });
 
 // Create the database if it doesn't exist
