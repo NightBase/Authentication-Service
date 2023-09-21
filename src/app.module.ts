@@ -42,6 +42,19 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       secret: process.env.ACCESS_TOKEN_SECRET,
       signOptions: { expiresIn: '10m' },
     }),
+    ClientsModule.register([
+      {
+        name: AUTHENTICATION_SERVICE_NAME,
+        transport: Transport.RMQ,
+        options: {
+          urls: BROKERS,
+          queue: AUTHENTICATION_QUEUE_NAME,
+          queueOptions: {
+            durable: false,
+          },
+        },
+      },
+    ]),
   ],
 })
 export class AppModule {}
