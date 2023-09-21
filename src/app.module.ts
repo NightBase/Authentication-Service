@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TokenModule } from './api/v1/token/token.module';
 import { JwtModule } from '@nestjs/jwt';
+import { DATABASE_NAME } from './utils/constants';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { JwtModule } from '@nestjs/jwt';
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USER,
       password: process.env.DB_PASS,
-      database: 'NightBase-User',
+      database: DATABASE_NAME,
       autoLoadModels: true,
       synchronize: true,
       logging: false,
