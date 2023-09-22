@@ -18,4 +18,12 @@ export class TokenService {
       return false;
     }
   }
+
+  refreshToken(token: string) {
+    return token;
+  }
+
+  revokeToken(token: string) {
+    return token;
+  }
 }
