@@ -1,16 +1,17 @@
-import { Controller, Inject } from '@nestjs/common';
-import { ClientProxy, MessagePattern } from '@nestjs/microservices';
+import { Controller, Get } from '@nestjs/common';
+import { MessagePattern } from '@nestjs/microservices';
 import { TokenService } from './token.service';
-import { ACCOUNT_SERVICE_NAME } from '@/utils/constants';
 
-@Controller('v1/token')
+@Controller('v1/auth/token')
 export class TokenController {
-  constructor(
-    private readonly tokenService: TokenService,
-    @Inject(ACCOUNT_SERVICE_NAME) private readonly accountQueue: ClientProxy,
-  ) {}
+  constructor(private readonly tokenService: TokenService) {}
 
-  @MessagePattern({ cmd: 'isTokenValid' })
+  @Get()
+  checkToken() {
+    return 'Token service is running';
+  }
+
+  @MessagePattern('NB-Auth:IsTokenValid')
   async isTokenValidHandler(token: string) {
     return this.tokenService.isTokenValid(token);
   }
