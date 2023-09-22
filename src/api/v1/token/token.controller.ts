@@ -15,4 +15,14 @@ export class TokenController {
   async isTokenValidHandler(token: string) {
     return this.tokenService.isTokenValid(token);
   }
+
+  @MessagePattern('NB-Auth:RefreshToken')
+  async refreshTokenHandler(token: string) {
+    return this.tokenService.refreshToken(token);
+  }
+
+  @MessagePattern('NB-Auth:RevokeToken')
+  async revokeTokenHandler(token: string) {
+    return this.tokenService.revokeToken(token);
+  }
 }
