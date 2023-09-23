@@ -13,7 +13,7 @@ export class TokenController {
 
   @MessagePattern('NB-Auth:IsTokenValid')
   async isTokenValidHandler(token: string) {
-    return this.tokenService.isTokenValid(token);
+    return this.tokenService.isValid(token);
   }
 
   @MessagePattern('NB-Auth:RefreshToken')
