@@ -1,21 +1,31 @@
 import { Op } from 'sequelize';
 
 import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Account } from '../Database/Models/account.model';
 import { Credentials } from '../Database/Dto/create.dto';
 import { createHash } from 'crypto';
+import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
+import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AccountService {
-  constructor(@InjectModel(Account) private readonly accountModel) {}
+  constructor(
+    @InjectModel(Account) private readonly accountModel,
+    @Inject(AUTHENTICATION_SERVICE_NAME)
+    private readonly authQueue: ClientProxy,
+  ) {}
 
-  async createAccount(data: Credentials) {
+  async createAccount(receivedData: any) {
+    const data = receivedData.data as Credentials;
+    const accessToken = receivedData.accessToken;
+
     const hash = createHash('sha256').update(data.password);
     data.password = hash.digest('hex');
 
     const isRoot = !(await this.isRootAccount());
-    const authState = await this.isAuthenticated();
+    const authState = await this.isAuthenticated(accessToken);
 
     // If the account is not root and the user is not authenticated
     // then we can't create an account
@@ -63,7 +73,13 @@ export class AccountService {
     return !!account;
   }
 
-  async isAuthenticated() {
+  async isAuthenticated(accessToken: string) {
+    const isValid = await lastValueFrom(
+      this.authQueue.send('NB-Auth:IsTokenValid', accessToken),
+    );
+    if (isValid === true) {
+      return true;
+    }
     return false;
   }
 }
