@@ -19,7 +19,6 @@ import { Database } from '../Database/Models/database.model';
 import { AuthService } from './authN.service';
 import { AuthController } from './authN.controller';
 import { LoginMiddleware } from '../middleware/login.middleware';
-import { RefreshToken } from '../Database/Models/token.model';
 
 @Module({
   imports: [
@@ -36,13 +35,7 @@ import { RefreshToken } from '../Database/Models/token.model';
         },
       },
     ]),
-    SequelizeModule.forFeature([
-      Account,
-      Permission,
-      Role,
-      Database,
-      RefreshToken,
-    ]),
+    SequelizeModule.forFeature([Account, Permission, Role, Database]),
   ],
   controllers: [AuthController],
   providers: [AuthService],

@@ -5,7 +5,6 @@ import { LoginDto } from '../Database/Dto/login.dto';
 import { createHash } from 'crypto';
 
 import { Op } from 'sequelize';
-import { RefreshToken } from '../Database/Models/token.model';
 import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
@@ -14,7 +13,6 @@ import { lastValueFrom } from 'rxjs';
 export class AuthService {
   constructor(
     @InjectModel(Account) private accountModel: typeof Account,
-    @InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken,
     @Inject(AUTHENTICATION_SERVICE_NAME) private authQueue: ClientProxy,
   ) {}
 

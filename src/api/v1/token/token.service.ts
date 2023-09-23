@@ -1,7 +1,6 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Account } from '../Database/Models/account.model';
-import { RefreshToken } from '../Database/Models/token.model';
 import { SessionData } from '@/utils/global';
 import { generateRandomString } from '@/utils/stringUtils';
 
@@ -9,7 +8,6 @@ import { generateRandomString } from '@/utils/stringUtils';
 export class TokenService {
   constructor(
     @InjectModel(Account) private accountModel: typeof Account,
-    @InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken,
     @Inject(SessionData) private sessionData: SessionData,
   ) {}
 
