@@ -1,52 +1,35 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Account } from '../Database/Models/account.model';
 import { JwtService } from '@nestjs/jwt';
 import { RefreshToken } from '../Database/Models/token.model';
-
-// TODO: Implement passport.js for session
+import { SessionData } from '@/utils/global';
+import { generateRandomString } from '@/utils/stringUtils';
 
 @Injectable()
 export class TokenService {
   constructor(
     @InjectModel(Account) private accountModel: typeof Account,
     @InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken,
+    @Inject(SessionData) private sessionData: SessionData,
     private jwtService: JwtService,
   ) {}
 
   async createToken(account: Account) {
-    const token = this.jwtService.sign({
+    const token = generateRandomString(64);
+    const refreshToken = generateRandomString(64);
+
+    this.sessionData.setSession(token, {
       id: account.id,
       username: account.username,
-    });
-
-    const refreshToken = this.jwtService.sign(
-      {
-        id: account.id,
-        username: account.username,
-      },
-      {
-        expiresIn: '7d',
-      },
-    );
-
-    await this.revokeToken(account.id);
-    await this.refreshTokenModel.create({
-      accountId: account.id,
-      token,
       refreshToken,
     });
-
     return [token, refreshToken];
   }
 
-  async refreshToken(token: string) {
-    const tokenFromDB = await this.refreshTokenModel.findOne({
-      where: {
-        refreshToken: token,
-      },
-    });
-    if (!tokenFromDB) {
+  async refreshToken(refreshToken: string) {
+    const refToken = this.sessionData.findTokenFromRefreshToken(refreshToken);
+    if (!refToken) {
       return new HttpException(
         {
           message: 'Invalid token',
@@ -55,35 +38,22 @@ export class TokenService {
         HttpStatus.UNAUTHORIZED,
       );
     }
-
-    const newToken = this.jwtService.sign({
-      id: tokenFromDB.accountId,
+    this.sessionData.deleteSession(refToken);
+    const token = generateRandomString(64);
+    this.sessionData.setSession(token, {
+      id: refToken.id,
+      username: refToken.username,
+      refreshToken,
     });
-
-    await this.refreshTokenModel.update(
-      {
-        token: newToken,
-      },
-      {
-        where: {
-          refreshToken: token,
-        },
-      },
-    );
-    return newToken;
+    return token;
   }
 
   async isValid(token: string) {
-    const tokenFromDB = await this.refreshTokenModel.findOne({
-      where: {
-        token,
-      },
-    });
-
-    if (!tokenFromDB) {
+    const session = this.sessionData.getSession(token);
+    if (!session) {
       return new HttpException(
         {
-          message: 'Invalid token',
+          message: 'Token not found in session data',
           logout: true,
         },
         HttpStatus.UNAUTHORIZED,
@@ -93,32 +63,19 @@ export class TokenService {
   }
 
   async isExpired(token: string) {
-    try {
-      this.jwtService.verify(token);
-      return false;
-    } catch (e) {
-      return true;
-    }
+    const expired = this.sessionData.isExpired(token);
+    return expired;
   }
 
   isRevoked(token: string) {
-    const tokenFromDB = this.refreshTokenModel.findOne({
-      where: {
-        token,
-      },
-    });
-
-    if (!tokenFromDB) {
+    const session = this.sessionData.getSession(token);
+    if (!session) {
       return true;
     }
     return false;
   }
 
-  async revokeToken(accountId: string) {
-    return await this.refreshTokenModel.destroy({
-      where: {
-        accountId,
-      },
-    });
+  async revokeToken(token: string) {
+    return this.sessionData.deleteSession(token);
   }
 }
