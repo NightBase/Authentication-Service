@@ -21,6 +21,11 @@ export class TokenController {
     return this.tokenService.refreshToken(token);
   }
 
+  @MessagePattern('NB-Auth:IsTokenRevoked')
+  async isTokenRevokedHandler(token: string) {
+    return this.tokenService.isRevoked(token);
+  }
+
   @MessagePattern('NB-Auth:RevokeToken')
   async revokeTokenHandler(token: string) {
     return this.tokenService.revokeToken(token);
