@@ -59,7 +59,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(IsTokenValid).forRoutes({
+    consumer.apply(IsTokenValid).exclude('v1/auth/login').forRoutes({
       path: 'v1/auth/*',
       method: RequestMethod.ALL,
     });
