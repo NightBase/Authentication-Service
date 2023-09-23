@@ -11,6 +11,11 @@ export class TokenController {
     return 'Token service is running';
   }
 
+  @MessagePattern('NB-Auth:CreateToken')
+  async createTokenHandler(data: any) {
+    return this.tokenService.createToken(data);
+  }
+
   @MessagePattern('NB-Auth:IsTokenValid')
   async isTokenValidHandler(token: string) {
     return this.tokenService.isValid(token);
