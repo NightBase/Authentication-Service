@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { TokenModule } from './api/v1/token/token.module';
-import { JwtModule } from '@nestjs/jwt';
 import {
   AUTHENTICATION_QUEUE_NAME,
   AUTHENTICATION_SERVICE_NAME,
@@ -36,11 +35,6 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
       dialectOptions: {
         application_name: 'NightBase-Authentication',
       },
-    }),
-    JwtModule.register({
-      global: true,
-      secret: process.env.ACCESS_TOKEN_SECRET,
-      signOptions: { expiresIn: '10m' },
     }),
     ClientsModule.register([
       {
