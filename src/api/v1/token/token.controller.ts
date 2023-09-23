@@ -16,6 +16,11 @@ export class TokenController {
     return this.tokenService.createToken(data);
   }
 
+  @MessagePattern('NB-Auth:IsTokenExpired')
+  async isTokenExpiredHandler(token: string) {
+    return this.tokenService.isExpired(token);
+  }
+
   @MessagePattern('NB-Auth:IsTokenValid')
   async isTokenValidHandler(token: string) {
     return this.tokenService.isValid(token);
