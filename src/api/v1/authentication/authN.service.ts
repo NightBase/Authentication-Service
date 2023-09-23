@@ -1,7 +1,6 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Account } from '../Database/Models/account.model';
-import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../Database/Dto/login.dto';
 import { createHash } from 'crypto';
 
@@ -17,17 +16,7 @@ export class AuthService {
     @InjectModel(Account) private accountModel: typeof Account,
     @InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken,
     @Inject(AUTHENTICATION_SERVICE_NAME) private authQueue: ClientProxy,
-    private jwtService: JwtService,
   ) {}
-
-  isTokenValid(token: string) {
-    try {
-      this.jwtService.verify(token);
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
 
   async login(data: LoginDto) {
     const hash = createHash('sha256').update(data.password);
