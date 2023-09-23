@@ -1,16 +1,22 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { Account } from '../Database/Models/account.model';
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from '../Database/Dto/login.dto';
 import { createHash } from 'crypto';
 
 import { Op } from 'sequelize';
+import { RefreshToken } from '../Database/Models/token.model';
+import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
+import { ClientProxy } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(Account) private accountModel: typeof Account,
+    @InjectModel(RefreshToken) private refreshTokenModel: typeof RefreshToken,
+    @Inject(AUTHENTICATION_SERVICE_NAME) private authQueue: ClientProxy,
     private jwtService: JwtService,
   ) {}
 
@@ -43,11 +49,13 @@ export class AuthService {
       );
     }
 
-    const token = this.jwtService.sign({
-      id: account.id,
-      username: account.username,
-    });
+    const [token, refreshToken] = await lastValueFrom(
+      this.authQueue.send('NB-Auth:CreateToken', account),
+    );
 
-    return token;
+    return {
+      token,
+      refreshToken,
+    };
   }
 }
