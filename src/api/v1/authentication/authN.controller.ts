@@ -17,6 +17,10 @@ export class AuthController {
     const loginData: any = await this.authService.login(data);
 
     response.header('Authorization', `Bearer ${loginData.token}`);
+    response.cookie('accessToken', loginData.token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7,
+    });
     response.cookie('refreshToken', loginData.refreshToken, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7,
