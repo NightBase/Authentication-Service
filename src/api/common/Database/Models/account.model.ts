@@ -10,4 +10,7 @@ export class Account extends Model {
 
   @Column
   declare email: string;
+
+  @Column
+  declare isRoot: boolean;
 }
