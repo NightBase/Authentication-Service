@@ -13,7 +13,8 @@ import {
   DATABASE_NAME,
 } from './utils/constants';
 import { AccountModule } from './api/v1/account/account.module';
-import { AuthModule } from './api/v1/authentication/authN.module';
+import { AuthNModule } from './api/v1/authentication/authN.module';
+import { AuthZModule } from './api/v1/authorization/authZ.module';
 import { IsTokenValid } from './api/v1/middleware/token.middleware';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 
@@ -21,7 +22,8 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
   imports: [
     TokenModule,
     AccountModule,
-    AuthModule,
+    AuthNModule,
+    AuthZModule,
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.DB_HOST,
