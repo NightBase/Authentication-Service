@@ -70,4 +70,12 @@ export class TokenService {
   async revokeToken(token: string) {
     return this.sessionData.deleteSession(token);
   }
+
+  async whoAmI(token: string) {
+    const session = this.sessionData.getSession(token);
+    if (!session) {
+      return null;
+    }
+    return session.value.username;
+  }
 }
