@@ -1,0 +1,9 @@
+export enum Permission {
+  READ = 'READ',
+  WRITE = 'WRITE',
+  DELETE = 'DELETE',
+  UPDATE = 'UPDATE',
+  CREATE_TABLE = 'CREATE_TABLE',
+  DROP = 'DROP_TABLE',
+  CREATE_USER = 'CREATE_USER',
+}
