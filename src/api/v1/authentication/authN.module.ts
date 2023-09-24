@@ -17,7 +17,7 @@ import { Account } from '../../common/Database/Models/account.model';
 import { Permission, Role } from '../../common/Database/Models/role.model';
 import { Database } from '../../common/Database/Models/database.model';
 
-import { AuthService } from './authN.service';
+import { LoginService } from './login/login.service';
 import { AuthController } from './authN.controller';
 import { LoginMiddleware } from '../middleware/login.middleware';
 import { TokenModule } from '../token/token.module';
@@ -41,7 +41,7 @@ import { TokenModule } from '../token/token.module';
     SequelizeModule.forFeature([Account, Permission, Role, Database]),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [LoginService],
 })
 export class AuthModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

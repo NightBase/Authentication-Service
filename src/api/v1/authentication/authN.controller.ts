@@ -1,11 +1,11 @@
 import { Body, Controller, HttpCode, Post, Res } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { AuthService } from './authN.service';
+import { LoginService } from './login/login.service';
 import { LoginDto } from '../../common/Database/Dto/login.dto';
 
 @Controller('v1/auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: LoginService) {}
 
   @MessagePattern('NB-Auth:Login')
   async createAccountHandler(data: LoginDto) {

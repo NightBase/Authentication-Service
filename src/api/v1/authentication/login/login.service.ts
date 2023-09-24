@@ -1,14 +1,14 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Account } from '../../common/Database/Models/account.model';
-import { LoginDto } from '../../common/Database/Dto/login.dto';
+import { Account } from '../../../common/Database/Models/account.model';
+import { LoginDto } from '../../../common/Database/Dto/login.dto';
 import { createHash } from 'crypto';
 
 import { Op } from 'sequelize';
-import { TokenService } from '../token/token.service';
+import { TokenService } from '../../token/token.service';
 
 @Injectable()
-export class AuthService {
+export class LoginService {
   constructor(
     private readonly tokenService: TokenService,
     @InjectModel(Account) private accountModel: typeof Account,
