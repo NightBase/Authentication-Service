@@ -9,7 +9,7 @@ import {
 
 // V1
 import { AccountController } from './account.controller';
-import { AccountService } from './account.service';
+import { AccountCreateService } from './create/create.service';
 
 // Models
 import { Account } from '../../common/Database/Models/account.model';
@@ -34,6 +34,6 @@ import { Database } from '../../common/Database/Models/database.model';
     SequelizeModule.forFeature([Account, Permission, Role, Database]),
   ],
   controllers: [AccountController],
-  providers: [AccountService],
+  providers: [AccountCreateService],
 })
 export class AccountModule {}

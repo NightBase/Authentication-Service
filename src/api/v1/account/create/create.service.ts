@@ -2,15 +2,15 @@ import { Op } from 'sequelize';
 
 import { InjectModel } from '@nestjs/sequelize';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Account } from '../../common/Database/Models/account.model';
-import { Credentials } from '../../common/Database/Dto/create.dto';
+import { Account } from '../../../common/Database/Models/account.model';
+import { Credentials } from '../../../common/Database/Dto/create.dto';
 import { createHash } from 'crypto';
 import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
 import { ClientProxy } from '@nestjs/microservices';
 import { lastValueFrom } from 'rxjs';
 
 @Injectable()
-export class AccountService {
+export class AccountCreateService {
   constructor(
     @InjectModel(Account) private readonly accountModel,
     @Inject(AUTHENTICATION_SERVICE_NAME)
