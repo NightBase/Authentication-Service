@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
 import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
 import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
-import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class IsTokenValid implements NestMiddleware {
   constructor(
     @Inject(AUTHENTICATION_SERVICE_NAME)
-    private readonly authQueue: ClientProxy,
+    private readonly tokenService: TokenService,
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
@@ -25,10 +24,7 @@ export class IsTokenValid implements NestMiddleware {
         message: 'Missing token',
       });
     }
-
-    const isValidToken = await lastValueFrom(
-      this.authQueue.send('NB-Auth:IsTokenValid', token),
-    );
+    const isValidToken = await this.tokenService.isValid(token);
 
     if (!isValidToken) {
       return res.status(HttpStatus.UNAUTHORIZED).json({
