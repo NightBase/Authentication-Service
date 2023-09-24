@@ -1,20 +1,19 @@
 import { Op } from 'sequelize';
 
 import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Account } from '../../../common/Database/Models/account.model';
 import { Credentials } from '../../../common/Database/Dto/create.dto';
 import { createHash } from 'crypto';
-import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
-import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { TokenService } from '../../token/token.service';
+import { AuthZPermission } from '../../authorization/permission/permission.service';
 
 @Injectable()
 export class AccountCreateService {
   constructor(
     @InjectModel(Account) private readonly accountModel,
-    @Inject(AUTHENTICATION_SERVICE_NAME)
-    private readonly authQueue: ClientProxy,
+    private readonly tokenService: TokenService,
+    private readonly authZPerm: AuthZPermission,
   ) {}
 
   async createAccount(receivedData: any) {
@@ -24,7 +23,7 @@ export class AccountCreateService {
     const hash = createHash('sha256').update(data.password);
     data.password = hash.digest('hex');
 
-    const isRoot = !(await this.isRootAccount());
+    const isRoot = !(await this.isRootAccountExists());
     const authState = await this.isAuthenticated(accessToken);
 
     // If the account is not root and the user is not authenticated
@@ -34,6 +33,16 @@ export class AccountCreateService {
         'You must authenticate to create an account',
         HttpStatus.UNAUTHORIZED,
       );
+    }
+
+    if (authState) {
+      const hasPermission = await this.authZPerm.hasRootPermission(accessToken);
+      if (!hasPermission) {
+        return new HttpException(
+          "You don't have permission to perform this action",
+          HttpStatus.FORBIDDEN,
+        );
+      }
     }
 
     // If the account exists then we can't create an account
@@ -47,6 +56,7 @@ export class AccountCreateService {
       username: data.username,
       password: data.password,
       email: data.email,
+      isRoot,
     });
 
     return {
@@ -68,15 +78,15 @@ export class AccountCreateService {
     return !!account;
   }
 
-  async isRootAccount() {
-    const account = await this.accountModel.findOne();
+  async isRootAccountExists() {
+    const account = await this.accountModel.findOne({
+      where: { isRoot: true },
+    });
     return !!account;
   }
 
   async isAuthenticated(accessToken: string) {
-    const isValid = await lastValueFrom(
-      this.authQueue.send('NB-Auth:IsTokenValid', accessToken),
-    );
+    const isValid = await this.tokenService.isValid(accessToken);
     if (isValid === true) {
       return true;
     }
