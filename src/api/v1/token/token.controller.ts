@@ -40,4 +40,9 @@ export class TokenController {
   async revokeTokenHandler(token: string) {
     return this.tokenService.revokeToken(token);
   }
+
+  @MessagePattern('NB-Auth:WhoAmI')
+  async whoAmIHandler(token: string) {
+    return this.tokenService.whoAmI(token);
+  }
 }
