@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
 import { AccountService } from './account.service';
-import { Credentials } from '../Database/Dto/create.dto';
+import { Credentials } from '../../common/Database/Dto/create.dto';
 
 @Controller('v1/user')
 export class AccountController {

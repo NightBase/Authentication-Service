@@ -1,19 +1,17 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Account } from '../Database/Models/account.model';
-import { LoginDto } from '../Database/Dto/login.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Account } from '../../common/Database/Models/account.model';
+import { LoginDto } from '../../common/Database/Dto/login.dto';
 import { createHash } from 'crypto';
 
 import { Op } from 'sequelize';
-import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
-import { ClientProxy } from '@nestjs/microservices';
-import { lastValueFrom } from 'rxjs';
+import { TokenService } from '../token/token.service';
 
 @Injectable()
 export class AuthService {
   constructor(
+    private readonly tokenService: TokenService,
     @InjectModel(Account) private accountModel: typeof Account,
-    @Inject(AUTHENTICATION_SERVICE_NAME) private authQueue: ClientProxy,
   ) {}
 
   async login(data: LoginDto) {
@@ -36,9 +34,7 @@ export class AuthService {
       );
     }
 
-    const [token, refreshToken] = await lastValueFrom(
-      this.authQueue.send('NB-Auth:CreateToken', account),
-    );
+    const [token, refreshToken] = await this.tokenService.createToken(account);
 
     return {
       token,

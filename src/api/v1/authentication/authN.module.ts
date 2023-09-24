@@ -13,15 +13,18 @@ import {
 } from '@/utils/constants';
 
 // Models
-import { Account } from '../Database/Models/account.model';
-import { Permission, Role } from '../Database/Models/role.model';
-import { Database } from '../Database/Models/database.model';
+import { Account } from '../../common/Database/Models/account.model';
+import { Permission, Role } from '../../common/Database/Models/role.model';
+import { Database } from '../../common/Database/Models/database.model';
+
 import { AuthService } from './authN.service';
 import { AuthController } from './authN.controller';
 import { LoginMiddleware } from '../middleware/login.middleware';
+import { TokenModule } from '../token/token.module';
 
 @Module({
   imports: [
+    TokenModule,
     ClientsModule.register([
       {
         name: AUTHENTICATION_SERVICE_NAME,

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
-import { LoginDto } from '../Database/Dto/login.dto';
+import { LoginDto } from '../../common/Database/Dto/login.dto';
 
 @Injectable()
 export class LoginMiddleware implements NestMiddleware {

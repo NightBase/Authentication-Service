@@ -1,15 +1,11 @@
-import { InjectModel } from '@nestjs/sequelize';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { Account } from '../Database/Models/account.model';
 import { SessionData } from '@/utils/global';
+import { Account } from '../../common/Database/Models/account.model';
 import { generateRandomString } from '@/utils/stringUtils';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class TokenService {
-  constructor(
-    @InjectModel(Account) private accountModel: typeof Account,
-    @Inject(SessionData) private sessionData: SessionData,
-  ) {}
+  constructor(@Inject(SessionData) private sessionData: SessionData) {}
 
   async createToken(account: Account) {
     const token = generateRandomString(64);

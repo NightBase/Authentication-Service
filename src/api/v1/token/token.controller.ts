@@ -1,6 +1,6 @@
+import { TokenService } from './token.service';
 import { Controller, Get } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { TokenService } from './token.service';
 
 @Controller('v1/auth/token')
 export class TokenController {

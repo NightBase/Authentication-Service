@@ -12,9 +12,9 @@ import { AccountController } from './account.controller';
 import { AccountService } from './account.service';
 
 // Models
-import { Account } from '../Database/Models/account.model';
-import { Permission, Role } from '../Database/Models/role.model';
-import { Database } from '../Database/Models/database.model';
+import { Account } from '../../common/Database/Models/account.model';
+import { Permission, Role } from '../../common/Database/Models/role.model';
+import { Database } from '../../common/Database/Models/database.model';
 
 @Module({
   imports: [

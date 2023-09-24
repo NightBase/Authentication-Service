@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';
 import { DATABASE_NAME } from './constants';
 
-import { Permission } from '../api/v1/Database/Models/role.model';
+import { Permission } from '../api/common/Database/Models/role.model';
 
 dotenv.config();
 
