@@ -9,6 +9,6 @@ import { Account } from '../../common/Database/Models/account.model';
   imports: [SequelizeModule.forFeature([Account])],
   controllers: [TokenController],
   providers: [TokenService, SessionData],
-  exports: [TokenService],
+  exports: [TokenService, SessionData],
 })
 export class TokenModule {}
