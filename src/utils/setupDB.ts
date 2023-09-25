@@ -74,6 +74,11 @@ async function insertPreData() {
       description: 'To drop a table from the database',
       alias: 'DROP_TABLE',
     },
+    {
+      name: 'Create User',
+      description: 'To create a new user in the database',
+      alias: 'CREATE_USER',
+    },
   ]);
   console.log('Predefined data inserted.');
   await sequelize.close();
