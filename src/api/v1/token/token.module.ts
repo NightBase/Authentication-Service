@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
 import { SessionData } from '@/utils/global';
-import { TokenService } from './token.service';
+import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { TokenController } from './token.controller';
+
 import { Account } from '../../common/Database/Models/account.model';
+import { TokenController } from './token.controller';
+import { TokenService } from './token.service';
 
 @Module({
   imports: [SequelizeModule.forFeature([Account])],

@@ -1,6 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
+import { NextFunction, Request, Response } from 'express';
+
 import { AUTHENTICATION_SERVICE_NAME } from '@/utils/constants';
+import { HttpStatus, Inject, Injectable, NestMiddleware } from '@nestjs/common';
+
 import { TokenService } from '../token/token.service';
 
 @Injectable()

@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import { Sequelize } from 'sequelize-typescript';
-import { DATABASE_NAME } from './constants';
 
 import { Permission } from '../api/common/Database/Models/role.model';
+import { DATABASE_NAME } from './constants';
 
 dotenv.config();
 

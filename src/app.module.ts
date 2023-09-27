@@ -2,21 +2,22 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod,
+  RequestMethod
 } from '@nestjs/common';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SequelizeModule } from '@nestjs/sequelize';
+
+import { AccountModule } from './api/v1/account/account.module';
+import { AuthNModule } from './api/v1/authentication/authN.module';
+import { AuthZModule } from './api/v1/authorization/authZ.module';
+import { IsTokenValid } from './api/v1/middleware/token.middleware';
 import { TokenModule } from './api/v1/token/token.module';
 import {
   AUTHENTICATION_QUEUE_NAME,
   AUTHENTICATION_SERVICE_NAME,
   BROKERS,
-  DATABASE_NAME,
+  DATABASE_NAME
 } from './utils/constants';
-import { AccountModule } from './api/v1/account/account.module';
-import { AuthNModule } from './api/v1/authentication/authN.module';
-import { AuthZModule } from './api/v1/authorization/authZ.module';
-import { IsTokenValid } from './api/v1/middleware/token.middleware';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [

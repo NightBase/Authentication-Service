@@ -1,8 +1,10 @@
 import dotenv from 'dotenv';
-import { AppModule } from './app.module';
-import { BROKERS, AUTHENTICATION_QUEUE_NAME } from './utils/constants';
+
 import { NestFactory } from '@nestjs/core';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
+import { AppModule } from './app.module';
+import { AUTHENTICATION_QUEUE_NAME, BROKERS } from './utils/constants';
 
 dotenv.config();
 

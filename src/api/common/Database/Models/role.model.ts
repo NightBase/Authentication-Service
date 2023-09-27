@@ -1,10 +1,11 @@
 import {
-  Column,
-  Model,
-  Table,
   BelongsTo,
+  Column,
   ForeignKey,
+  Model,
+  Table
 } from 'sequelize-typescript';
+
 import { Database } from './database.model';
 
 @Table
