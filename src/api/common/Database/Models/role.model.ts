@@ -3,7 +3,7 @@ import {
   Column,
   ForeignKey,
   Model,
-  Table
+  Table,
 } from 'sequelize-typescript';
 
 import { Database } from './database.model';

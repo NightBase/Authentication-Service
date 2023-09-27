@@ -2,7 +2,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod
+  RequestMethod,
 } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { SequelizeModule } from '@nestjs/sequelize';
@@ -16,7 +16,7 @@ import {
   AUTHENTICATION_QUEUE_NAME,
   AUTHENTICATION_SERVICE_NAME,
   BROKERS,
-  DATABASE_NAME
+  DATABASE_NAME,
 } from './utils/constants';
 
 @Module({
