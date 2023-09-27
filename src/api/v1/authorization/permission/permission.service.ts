@@ -11,6 +11,8 @@ export class AuthZPermission {
 
   async hasRootPermission(token: string) {
     const session = this.sessionData.getSession(token);
+    if (!session) return false;
+
     const user = await this.accountModel.findOne({
       where: {
         username: session.value.username,
