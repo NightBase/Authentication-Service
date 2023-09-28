@@ -23,4 +23,13 @@ export class AccountGetService {
     });
     return !!account;
   }
+
+  async getRootAccount() {
+    const account = await this.accountModel.findOne({
+      where: {
+        isRoot: true,
+      },
+    });
+    return account;
+  }
 }
