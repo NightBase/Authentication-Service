@@ -10,6 +10,8 @@ import { TokenModule } from '../token/token.module';
 // V1
 import { AccountController } from './account.controller';
 import { AccountCreateService } from './create/create.service';
+import { AccountDeleteService } from './delete/delete.service';
+import { AccountGetService } from './get/get.service';
 
 @Module({
   imports: [
@@ -18,6 +20,6 @@ import { AccountCreateService } from './create/create.service';
     AuthZModule,
   ],
   controllers: [AccountController],
-  providers: [AccountCreateService],
+  providers: [AccountCreateService, AccountDeleteService, AccountGetService],
 })
 export class AccountModule {}
