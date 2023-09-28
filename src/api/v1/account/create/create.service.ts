@@ -31,7 +31,10 @@ export class AccountCreateService {
     // then we can't create an account
     if (!isRoot && !authState) {
       return new HttpException(
-        'You must authenticate to create an account',
+        {
+          message: 'You must authenticate to create an account',
+          logout: true,
+        },
         HttpStatus.UNAUTHORIZED,
       );
     }
