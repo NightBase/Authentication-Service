@@ -7,6 +7,43 @@ import { DATABASE_NAME } from './constants';
 dotenv.config();
 
 const dbName = DATABASE_NAME;
+const permissions = [
+  {
+    name: 'Read',
+    description: 'To read data from the database',
+    alias: 'READ',
+  },
+  {
+    name: 'Write',
+    description: 'To write data to the database',
+    alias: 'WRITE',
+  },
+  {
+    name: 'Update',
+    description: 'To update data in the database',
+    alias: 'UPDATE',
+  },
+  {
+    name: 'Delete Data',
+    description: 'To delete data from the database',
+    alias: 'DELETE',
+  },
+  {
+    name: 'Create Table',
+    description: 'To create a new table in the database',
+    alias: 'CREATE_TABLE',
+  },
+  {
+    name: 'Drop Table',
+    description: 'To drop a table from the database',
+    alias: 'DROP_TABLE',
+  },
+  {
+    name: 'Create User',
+    description: 'To create a new user in the database',
+    alias: 'CREATE_USER',
+  },
+];
 
 async function createDatabase() {
   const sequelize = new Sequelize({
@@ -42,44 +79,20 @@ async function insertPreData() {
   });
   sequelize.addModels([Permission]);
   await sequelize.sync({ alter: true });
-  await Permission.destroy({ truncate: true });
-  await Permission.bulkCreate([
-    {
-      name: 'Read',
-      description: 'To read data from the database',
-      alias: 'READ',
-    },
-    {
-      name: 'Write',
-      description: 'To write data to the database',
-      alias: 'WRITE',
-    },
-    {
-      name: 'Update',
-      description: 'To update data in the database',
-      alias: 'UPDATE',
-    },
-    {
-      name: 'Delete Data',
-      description: 'To delete data from the database',
-      alias: 'DELETE',
-    },
-    {
-      name: 'Create Table',
-      description: 'To create a new table in the database',
-      alias: 'CREATE_TABLE',
-    },
-    {
-      name: 'Drop Table',
-      description: 'To drop a table from the database',
-      alias: 'DROP_TABLE',
-    },
-    {
-      name: 'Create User',
-      description: 'To create a new user in the database',
-      alias: 'CREATE_USER',
-    },
-  ]);
+  // try {
+  //   await Permission.destroy({ truncate: true });
+  // } catch {
+  //   console.log('No predefined data to delete.');
+  //   await sequelize.close();
+  //   return;
+  // }
+  const perms = await Permission.findAll();
+  if (perms.length == permissions.length) {
+    console.log('Predefined data already exists.');
+    return await sequelize.close();
+  }
+  await Permission.destroy({ truncate: true, cascade: true });
+  await Permission.bulkCreate(permissions);
   console.log('Predefined data inserted.');
   await sequelize.close();
 }
