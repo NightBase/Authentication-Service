@@ -1,10 +1,10 @@
 {
-  "name": "account-service",
+  "name": "nightbase-authentication",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "Apache-2.0",
   "scripts": {
     "db:generate": "npx ts-node src/utils/setupDB.ts",
     "build": "nest build",
